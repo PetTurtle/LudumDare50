@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://terrain/terrain.gd" type="Script" id=1]
+[ext_resource path="res://terrain/terrain.png" type="Texture" id=2]
+[ext_resource path="res://terrain/shader/terrain_material.tres" type="Material" id=3]
+
+[node name="Terrain" type="StaticBody2D"]
+script = ExtResource( 1 )
+sprite_path = NodePath("Sprite")
+
+[node name="Sprite" type="Sprite" parent="."]
+material = ExtResource( 3 )
+texture = ExtResource( 2 )
+centered = false

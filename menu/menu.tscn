@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://menu/menu_stack.gd" type="Script" id=1]
+[ext_resource path="res://menu/submenus/main.tscn" type="PackedScene" id=2]
+[ext_resource path="res://shaders/transition/transition.tscn" type="PackedScene" id=3]
+[ext_resource path="res://menu/menu.gd" type="Script" id=9]
+
+[node name="Menu" type="Node2D"]
+script = ExtResource( 9 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource( 1 )
+default_scene_path = NodePath("Main")
+
+[node name="Main" parent="CanvasLayer" instance=ExtResource( 2 )]
+
+[node name="Transition" parent="CanvasLayer" instance=ExtResource( 3 )]
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+auto_open = true
+speed_scale = 0.5

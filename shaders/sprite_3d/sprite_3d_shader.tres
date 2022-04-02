@@ -1,0 +1,32 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform vec2 direction = vec2(0, 1);
+uniform vec4 shadow_color : hint_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float shadow_strength : hint_range(0.0,1.0) = 1.0;
+
+varying vec2 world_direction;
+
+vec2 rotate(vec2 vector, float angle) {
+	float sin_angle = sin(angle);
+	float cos_angle = cos(angle);
+	return vec2((cos_angle * vector.x) - (sin_angle * vector.y), (sin_angle * vector.x) + (cos_angle * vector.y));
+}
+
+void vertex() {
+	float rotation = atan(WORLD_MATRIX[0].y, WORLD_MATRIX[0].x);
+	world_direction = rotate(direction, -rotation);
+}
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	vec4 shadow = texture(TEXTURE, UV + (world_direction * TEXTURE_PIXEL_SIZE));
+	
+	if (color.a == 0.0 && shadow.a != 0.0) {
+		COLOR = mix(shadow, shadow_color, shadow_strength);
+	} else {
+		COLOR = color;
+	}
+}"

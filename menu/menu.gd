@@ -1,5 +1,6 @@
 extends Node2D
 
+const game_scene := preload("res://game/game.tscn")
 
 func load_game():
-	assert(get_tree().change_scene("res://game/game.tscn") == OK)
+	get_tree().change_scene_to(game_scene)

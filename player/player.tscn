@@ -6,11 +6,12 @@
 [ext_resource path="res://player/self_intersect_detector.gd" type="Script" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 8.0
+radius = 9.0
 
 [node name="Player" type="Area2D"]
+z_index = 5
 collision_layer = 2
-collision_mask = 5
+collision_mask = 13
 script = ExtResource( 3 )
 
 [node name="HeadCollider" type="CollisionShape2D" parent="."]
@@ -46,3 +47,4 @@ texture = ExtResource( 2 )
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
 [connection signal="extended_body" from="Body" to="Body/SelfIntersect" method="_on_extended_body"]
+[connection signal="shrunk_body" from="Body" to="Body/SelfIntersect" method="_on_shrunk_body"]

@@ -10,9 +10,21 @@ var _sprite: Sprite
 var _texture := ImageTexture.new()
 
 
-func _init(sprite: Sprite):
+func _init(sprite: Sprite, noise_image: Image):
 	_sprite = sprite
 	_image = sprite.texture.get_data()
+
+	_image.lock()
+	noise_image.lock()
+	var img_size := _image.get_size()
+	for x in range(img_size.x):
+		for y in range(img_size.y):
+			var point := Vector2(x, y)
+			if noise_image.get_pixelv(point).r > 0.5:
+				_image.set_pixelv(point, Color(0, 0, 0, 0))
+	_image.unlock()
+	noise_image.unlock()
+	
 	_texture.create_from_image(_image)
 	_sprite.texture = _texture
 	_image_rect = Rect2(Vector2.ZERO, _image.get_size())
@@ -23,7 +35,8 @@ func _init(sprite: Sprite):
 		offset += _image_rect.end * 0.5
 
 
-func erase_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
+func erase_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D) -> int:
+	var erased := 0
 	var map_rect := Rect2(Vector2.ZERO, damage_map.get_size())
 	_image.lock()
 	damage_map.lock()
@@ -33,7 +46,8 @@ func erase_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
 			var point: Vector2 = Vector2(x, y)
 			var map_point: Vector2 = map_trans.xform(point)
 			if map_rect.has_point(map_point) and _image_rect.has_point(point):
-				if damage_map.get_pixelv(map_point).a > 0:
+				if damage_map.get_pixelv(map_point).a > 0 and _image.get_pixelv(point).a != 0:
+					erased += 1
 					bitmap.set_bit(point, false)
 					_image.set_pixelv(point, Color(0, 0, 0, 0))
 	_remove_floating_pixels(rect)
@@ -41,9 +55,11 @@ func erase_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
 	_image.unlock()
 	damage_map.unlock()
 	_texture.create_from_image(_image)
+	return erased
 
 
-func draw_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
+func draw_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D) -> int:
+	var drawed := 0
 	var map_rect := Rect2(Vector2.ZERO, damage_map.get_size())
 	_image.lock()
 	damage_map.lock()
@@ -54,6 +70,7 @@ func draw_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
 			var map_point: Vector2 = map_trans.xform(point)
 			if map_rect.has_point(map_point) and _image_rect.has_point(point):
 				if damage_map.get_pixelv(map_point).a > 0 and _image.get_pixelv(point).a == 0:
+					drawed += 1
 					bitmap.set_bit(point, true)
 					_image.set_pixelv(point, damage_map.get_pixelv(map_point))
 	_remove_floating_pixels(rect)
@@ -61,6 +78,7 @@ func draw_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D):
 	_image.unlock()
 	damage_map.unlock()
 	_texture.create_from_image(_image)
+	return drawed
 
 
 func _remove_floating_pixels(rect: Rect2):

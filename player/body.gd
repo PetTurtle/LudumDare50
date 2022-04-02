@@ -1,11 +1,12 @@
 extends Line2D
 
 signal extended_body()
+signal shrunk_body()
 
 export var offset := Vector2.ZERO
 
-var body_length: int = 4
-var segment_length := 8.0
+var body_length: int = 8
+var segment_length := 4.0
 
 onready var parent := get_parent() as Node2D
 
@@ -23,15 +24,13 @@ func _process(_delta):
 		add_point(Vector2(last_point.x, last_point.y))
 		emit_signal("extended_body")
 	
+	while points.size() > body_length:
+		remove_point(points.size()-1)
+		emit_signal("shrunk_body")
+	
 	points[0] = parent.global_position  + offset
 	for i in range(1, points.size()):
 		var distance := points[i-1].distance_to(points[i])
 		if distance > segment_length:
 			var direction := points[i-1].direction_to(points[i])
 			points[i] = points[i-1] + direction * segment_length
-	
-#	point = get_parent().global_position
-#	add_point(point)
-#	while get_point_count() > trailLength:
-#		remove_point(0)
-#	pass

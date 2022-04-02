@@ -4,6 +4,6 @@
 
 [resource]
 shader = ExtResource( 1 )
-shader_param/direction = Vector2( 4, 2 )
+shader_param/direction = Vector2( 4, 0 )
 shader_param/shadow_color = Color( 0, 0, 0, 1 )
 shader_param/shadow_strength = 0.548

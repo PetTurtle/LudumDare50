@@ -9,20 +9,15 @@ export(float) var deceleration := 100.0
 export(float) var turn_speed := 4.0
 export(float) var gravity_force := 2.0
 
+var in_terrains := 0
 var move_velocity := 0.0
-var in_terrain := false
 
 onready var bodies = [$Body, $BodyShadow]
 onready var self_intersect = $Body/SelfIntersect
 
 
-func extend_body():
-	for body in bodies:
-		body.body_length += 1
-
-
 func _physics_process(delta: float):
-	if in_terrain:
+	if in_terrains > 0:
 		var velocity_throttle := Input.get_action_strength("speed_up")
 		var rotation_throttle := Input.get_action_strength("turn_right") - Input.get_action_strength("turn_left")
 		move_velocity += velocity_throttle * acceleration * delta
@@ -41,18 +36,16 @@ func _physics_process(delta: float):
 func _on_shape_entered(_area_rid, area, _area_shape_index, _local_shape_index):
 	if area == self_intersect:
 		print("self_intersect")
-		emit_signal("self_intersect")
+	emit_signal("self_intersect")
 
 
 func _on_shape_exited(_area_rid, _area, _area_shape_index, _local_shape_index):
 	pass # Replace with function body.
 
 
-func _on_body_entered(body):
-	if body is Terrain:
-		in_terrain = true
+func _on_body_entered(_body):
+	in_terrains += 1
 
 
-func _on_body_exited(body):
-	if body is Terrain:
-		in_terrain = false
+func _on_body_exited(_body):
+	in_terrains -= 1

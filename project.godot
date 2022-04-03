@@ -39,7 +39,7 @@ _global_script_class_icons={
 [application]
 
 config/name="LudumDare50"
-run/main_scene="res://menu/menu.tscn"
+run/main_scene="res://game/game.tscn"
 boot_splash/image="res://boot_splash.png"
 boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0.121569, 0.0627451, 0.164706, 1 )
@@ -120,6 +120,11 @@ m2={
 m3={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":3,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+pause={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
 

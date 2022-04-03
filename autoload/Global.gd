@@ -9,7 +9,7 @@ var challange_dir := 1
 var challange_force := 0.02
 
 var challange := -0.05
-var challange_color := challange
+var challange_color := 0.0
 var challange_material: ShaderMaterial = null
 var challange_wall_material: ShaderMaterial = null
 var challange_back_material: ShaderMaterial = null
@@ -20,13 +20,19 @@ var level := 0 setget set_level
 var score := 0 setget set_score
 
 func reset():
+	level = 0
+	score = 0
 	challange = -0.05
+	challange_color = 0
 	max_challange = 0.1
 	min_challange = 0.0
+	challange_material = null
+	challange_wall_material = null
+	challange_back_material = null
 
 
 func _process(delta):
-	challange_color = lerp(challange_color, challange, delta)
+	challange_color = max(0, lerp(challange_color, challange, delta))
 	if challange_material:
 		challange_material.set_shader_param("challange", challange_color * 10)
 		challange_wall_material.set_shader_param("challange", challange_color * 10)

@@ -21,7 +21,7 @@ var block_size_query := block_size * 6
 onready var sprite := $Sprite as Sprite
 onready var wall_sprite := $WallSprite as Sprite
 onready var back_sprite := $BackSprite as Sprite
-onready var raycast := $RayCast2D as RayCast2D
+onready var raydown := $RayDown as RayCast2D
 
 
 func _ready():
@@ -78,14 +78,14 @@ func _generate_collidors():
 
 func _generate_objects():
 	for i in range(randi() % 5):
-		raycast.position.x = rand_range(10.0, 440.0)
-		raycast.force_raycast_update()
-		if raycast.is_colliding():
-			if raycast.get_collision_point().distance_to(raycast.global_position) > 12:
+		raydown.position.x = rand_range(10.0, 440.0)
+		raydown.force_raycast_update()
+		if raydown.is_colliding():
+			if raydown.get_collision_point().distance_to(raydown.global_position) > 12:
 				var object = OBJECTS[randi() % OBJECTS.size()].instance() as Node2D
 				add_child(object)
-				object.global_position = raycast.get_collision_point()
-	raycast.queue_free()
+				object.global_position = raydown.get_collision_point()
+	raydown.queue_free()
 	set_process(false)
 
 

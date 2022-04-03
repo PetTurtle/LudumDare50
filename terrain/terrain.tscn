@@ -26,7 +26,7 @@ material = ExtResource( 3 )
 texture = ExtResource( 2 )
 centered = false
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
+[node name="RayDown" type="RayCast2D" parent="."]
 position = Vector2( 0, -10 )
 enabled = true
 exclude_parent = false

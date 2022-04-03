@@ -14,23 +14,30 @@ export(float) var gravity_force := 2.0
 const HEALTH_TO_SIZE := 32.0
 
 var in_terrains := 0
+var active := true setget set_active
 var move_velocity := speed
 var health := 0.0 setget set_health
 
 
 onready var bodies = [$Body, $BodyShadow]
 onready var self_intersect = $Body/SelfIntersect
+onready var game = get_tree().current_scene
 
 
 func set_health(value):
 	health = value
 	
 	if health < -1:
-		emit_signal("self_intersect")
+		game.game_over("Became To Small")
 	
 	for body in bodies:
 		body.body_length = 4 + ceil(health / HEALTH_TO_SIZE)
 
+
+func set_active(value):
+	active = value
+	set_process(active)
+	set_physics_process(active)
 
 func _physics_process(delta: float):
 	if in_terrains > 0:
@@ -54,8 +61,7 @@ func _physics_process(delta: float):
 
 func _on_area_entered(area):
 	if area == self_intersect:
-		print("self_intersect")
-		emit_signal("self_intersect")
+		game.game_over("Ate Yourself!")
 
 
 func _on_body_entered(_body):

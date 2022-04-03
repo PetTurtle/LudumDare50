@@ -5,8 +5,8 @@ signal shrunk_body()
 
 export var offset := Vector2.ZERO
 
-var body_length: int = 8
-var segment_length := 4.0
+var body_length: int = 4
+var segment_length := 8.0
 
 onready var parent := get_parent() as Node2D
 

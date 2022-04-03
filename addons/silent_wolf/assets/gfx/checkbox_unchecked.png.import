@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/terrain_empty.png-81cc35339304847cfe721b7be3a91b6a.stex"
+path="res://.import/checkbox_unchecked.png-747244fa66895a7a282a8f1df36959ae.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://terrain/terrain_empty.png"
-dest_files=[ "res://.import/terrain_empty.png-81cc35339304847cfe721b7be3a91b6a.stex" ]
+source_file="res://addons/silent_wolf/assets/gfx/checkbox_unchecked.png"
+dest_files=[ "res://.import/checkbox_unchecked.png-747244fa66895a7a282a8f1df36959ae.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

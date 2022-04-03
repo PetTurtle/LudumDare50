@@ -10,21 +10,39 @@ var _sprite: Sprite
 var _texture := ImageTexture.new()
 
 
-func _init(sprite: Sprite, noise_image: Image):
+func _init(sprite: Sprite, wall_sprite: Sprite, back_sprite: Sprite, noise: OpenSimplexNoise, height: float, level: float):
 	_sprite = sprite
 	_image = sprite.texture.get_data()
-
+	
+	var wall_image := wall_sprite.texture.get_data()
+	var back_image := back_sprite.texture.get_data()
+	
 	_image.lock()
-	noise_image.lock()
+	wall_image.lock()
+	back_image.lock()
 	var img_size := _image.get_size()
 	for x in range(img_size.x):
 		for y in range(img_size.y):
 			var point := Vector2(x, y)
-			if noise_image.get_pixelv(point).r > 0.5:
+			var noise_val := noise.get_noise_2d(point.x, point.y + height)
+			if noise_val < Global.challange - 0.1:
+				back_image.set_pixelv(point, Color(0, 0, 0, 0))
+			if noise_val < Global.challange:
 				_image.set_pixelv(point, Color(0, 0, 0, 0))
+				wall_image.set_pixelv(point, Color(0, 0, 0, 0))
+				
 	_image.unlock()
-	noise_image.unlock()
-	
+	wall_image.unlock()
+	back_image.unlock()
+
+	var wall_texture := ImageTexture.new()
+	wall_texture.create_from_image(wall_image)
+	wall_sprite.texture = wall_texture
+
+	var back_texture := ImageTexture.new()
+	back_texture.create_from_image(back_image)
+	back_sprite.texture = back_texture
+
 	_texture.create_from_image(_image)
 	_sprite.texture = _texture
 	_image_rect = Rect2(Vector2.ZERO, _image.get_size())
@@ -33,7 +51,6 @@ func _init(sprite: Sprite, noise_image: Image):
 	offset = _sprite.offset
 	if _sprite.centered:
 		offset += _image_rect.end * 0.5
-
 
 func erase_rect(rect: Rect2, damage_map: Image, map_trans: Transform2D) -> int:
 	var erased := 0

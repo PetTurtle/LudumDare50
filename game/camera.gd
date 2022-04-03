@@ -1,8 +1,8 @@
 extends Camera2D
 
 
-onready var water = get_parent().get_node("Water")
+onready var player = get_parent().get_node("Player")
 
 
 func _process(_delta):
-	position.y = water.global_position.y - 180
+	position.y = round(player.global_position.y - 180)

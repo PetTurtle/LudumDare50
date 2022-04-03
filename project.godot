@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Area2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://player/player.gd"
+}, {
 "base": "Resource",
 "class": "QuadTree",
 "language": "GDScript",
@@ -25,6 +30,7 @@ _global_script_classes=[ {
 "path": "res://terrain/terrain_tools.gd"
 } ]
 _global_script_class_icons={
+"Player": "",
 "QuadTree": "",
 "Terrain": "",
 "TextureTools": ""
@@ -38,6 +44,11 @@ boot_splash/image="res://boot_splash.png"
 boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0.121569, 0.0627451, 0.164706, 1 )
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://autoload/Global.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 
 [display]
 
@@ -118,6 +129,7 @@ m3={
 2d_physics/layer_2="PlayerHead"
 2d_physics/layer_3="PlayerBody"
 2d_physics/layer_4="Water"
+2d_physics/layer_5="Wall"
 
 [physics]
 

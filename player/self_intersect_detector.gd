@@ -3,7 +3,7 @@ extends Area2D
 const COLLIDER_SCENE = preload("res://player/body_collidors.tscn")
 
 var colliders := []
-var min_points := 8
+var min_points := 4
 
 onready var parent := get_parent() as Line2D
 

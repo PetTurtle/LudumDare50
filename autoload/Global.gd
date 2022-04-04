@@ -13,8 +13,9 @@ var challange_color := 0.0
 var challange_material: ShaderMaterial = null
 var challange_wall_material: ShaderMaterial = null
 var challange_back_material: ShaderMaterial = null
+var spike_material: ShaderMaterial = null
 var max_challange := 0.2
-var min_challange := 0.0
+var min_challange := 0.1
 
 var level := 0 setget set_level
 var score := 0 setget set_score
@@ -29,6 +30,7 @@ func reset():
 	challange_material = null
 	challange_wall_material = null
 	challange_back_material = null
+	spike_material = null
 
 
 func _process(delta):
@@ -37,6 +39,8 @@ func _process(delta):
 		challange_material.set_shader_param("challange", challange_color * 10)
 		challange_wall_material.set_shader_param("challange", challange_color * 10)
 		challange_back_material.set_shader_param("challange", challange_color * 10)
+	if spike_material:
+		spike_material.set_shader_param("challange", challange_color * 10)
 
 
 func step():
@@ -48,10 +52,9 @@ func step():
 			challange_force = -challange_force
 	else:
 		if (challange < min_challange):
-			min_challange = min(MIN, min_challange + 0.01)
+			min_challange = min(MIN, min_challange + 0.012)
 			challange_force = -challange_force
-	
-	#print(challange, " ", min_challange, ":", max_challange)
+	#print(min_challange, " < ", challange, " < ", max_challange)
 
 
 func set_level(value):

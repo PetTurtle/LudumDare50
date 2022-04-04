@@ -52,10 +52,15 @@ void fragment() {
 		shadow.rgb = mix(MAIN[chal_min], MAIN[chal_max], chal_t);
 	}
 	
-	color = mix(color, tint_color, tint_strength);
-	shadow = mix(shadow, tint_color, tint_strength);
+	if (color.a != 0.0) {
+		color = mix(color, tint_color, tint_strength);
+	}
 	
-	if (color.a == 0.0 && shadow.a != 0.0) {
+	if (shadow.a != 0.0) {
+		shadow = mix(shadow, tint_color, tint_strength);
+	}
+	
+	if (color.a == 0.0 && shadow.a != 0.0 && UV.x + (world_direction.x * TEXTURE_PIXEL_SIZE.x) < 1.0 - (world_direction.x * TEXTURE_PIXEL_SIZE.x)) {
 		COLOR = mix(shadow, shadow_color, shadow_strength);
 	} else {
 		COLOR = color;

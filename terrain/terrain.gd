@@ -8,9 +8,28 @@ export(Vector2) var block_size := Vector2(45, 45)
 
 const OBJECTS = [
 	preload("res://objects/mine/mine.tscn"),
-	preload("res://objects/food/food.tscn")
+	preload("res://objects/food/food.tscn"),
+	preload("res://objects/spike/spike.tscn"),
+	preload("res://objects/boost/boost.tscn"),
 ]
 
+const UP_OBJECTS = [
+	OBJECTS[0],
+	OBJECTS[0],
+	OBJECTS[1],
+	OBJECTS[1],
+	OBJECTS[3],
+]
+
+const DOWN_Objects = [
+	OBJECTS[2],
+	OBJECTS[2],
+	OBJECTS[2],
+	OBJECTS[2],
+	OBJECTS[3],
+]
+
+var gen_state := 0
 var collisions := []
 var block_tree: QuadTree
 var collision_tree: QuadTree
@@ -22,6 +41,7 @@ onready var sprite := $Sprite as Sprite
 onready var wall_sprite := $WallSprite as Sprite
 onready var back_sprite := $BackSprite as Sprite
 onready var raydown := $RayDown as RayCast2D
+onready var rayup := $RayUp as RayCast2D
 
 
 func _ready():
@@ -33,7 +53,7 @@ func _ready():
 	Global.challange_material = sprite.material
 	Global.challange_wall_material = wall_sprite.material
 	Global.challange_back_material = back_sprite.material
-	texture_tools = TextureTools.new(sprite, wall_sprite, back_sprite, noise, position.y, level)
+	texture_tools = TextureTools.new(sprite, noise, position.y, level)
 	
 	block_tree = QuadTree.new(Rect2(Vector2.ZERO, sprite.texture.get_size()), 5, 5)
 	collision_tree = QuadTree.new(Rect2(Vector2.ZERO, sprite.texture.get_size()), 5, 5)
@@ -77,15 +97,25 @@ func _generate_collidors():
 
 
 func _generate_objects():
-	for i in range(randi() % 5):
+	for i in range(randi() % 10):
 		raydown.position.x = rand_range(10.0, 440.0)
 		raydown.force_raycast_update()
-		if raydown.is_colliding():
-			if raydown.get_collision_point().distance_to(raydown.global_position) > 12:
-				var object = OBJECTS[randi() % OBJECTS.size()].instance() as Node2D
+		if raydown.is_colliding() and raydown.get_collider() == self:
+			if raydown.get_collision_point().distance_to(raydown.global_position) > 35:
+				var object = UP_OBJECTS[randi() % UP_OBJECTS.size()].instance() as Node2D
 				add_child(object)
 				object.global_position = raydown.get_collision_point()
 	raydown.queue_free()
+	
+	for i in range(randi() % 10):
+		rayup.position.x = rand_range(10.0, 440.0)
+		rayup.force_raycast_update()
+		if rayup.is_colliding() and rayup.get_collider() == self:
+			if rayup.get_collision_point().distance_to(rayup.global_position) > 35:
+				var object = DOWN_Objects[randi() % DOWN_Objects.size()].instance() as Node2D
+				add_child(object)
+				object.global_position = rayup.get_collision_point()
+	rayup.queue_free()
 	set_process(false)
 
 
@@ -117,4 +147,12 @@ func _create_collision(polygon: PoolVector2Array, offset: Vector2) -> CollisionP
 	return collision
 
 
-
+func _on_gen_timer_timeout():
+	if gen_state == 0:
+		texture_tools.generate_image_sprite()
+	elif gen_state == 1:
+		texture_tools.generate_wall_sprite(wall_sprite)
+	else:
+		texture_tools.generate_back_sprite(back_sprite)
+		$GenTimer.stop()
+	gen_state += 1

@@ -3,6 +3,13 @@ extends Node2D
 onready var tween = $Tween
 onready var label = $TextureRect/Label as Label
 onready var game = get_tree().current_scene
+onready var username = $TextureRect/Username as LineEdit
+onready var submit = $TextureRect/Submit as Button
+
+
+func _process(delta):
+	username.rect_rotation = 0
+	submit.rect_rotation = 0
 
 
 func _on_Game_game_over(msg):
@@ -17,4 +24,3 @@ func _on_Game_game_over(msg):
 		player.rotation, (randf() * PI/3) - PI/6, 0.2,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
-

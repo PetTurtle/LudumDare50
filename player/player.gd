@@ -22,13 +22,16 @@ var health := 0.0 setget set_health
 onready var bodies = [$Body, $BodyShadow]
 onready var self_intersect = $Body/SelfIntersect
 onready var game = get_tree().current_scene
+onready var boost_particles = $BoostParticles as CPUParticles2D
 
 
 func set_health(value):
 	health = value
 	
-	if health < -1:
+	if health < 0:
+		health = 0
 		game.game_over("Became To Small")
+		
 	
 	for body in bodies:
 		body.body_length = 4 + ceil(health / HEALTH_TO_SIZE)
@@ -39,13 +42,22 @@ func set_active(value):
 	set_process(active)
 	set_physics_process(active)
 
+
+func add_velocity(value: Vector2):
+	var move_dir := ((Vector2.RIGHT * move_velocity).rotated(rotation) + value)
+	move_velocity = min(boost_speed, max(speed, move_dir.length()))
+	rotation = move_dir.angle()
+
+
 func _physics_process(delta: float):
+	boost_particles.emitting = false
 	if in_terrains > 0:
 		var boost_throttle := Input.get_action_strength("speed_up")
 		var rotation_throttle := Input.get_action_strength("turn_right") - Input.get_action_strength("turn_left")
 		if boost_throttle == 0 or health <= 0:
 			move_velocity -= deceleration * delta
 		else:
+			boost_particles.emitting = true
 			set_health(max(0, health - 60 * delta))
 			move_velocity += boost_throttle * acceleration * delta
 		move_velocity = min(boost_speed, max(speed, move_velocity))
@@ -57,11 +69,6 @@ func _physics_process(delta: float):
 		
 	position += (Vector2.RIGHT * move_velocity * delta).rotated(rotation)
 	position.x = max(0, min(450, position.x))
-
-
-func _on_area_entered(area):
-	if area == self_intersect:
-		game.game_over("Ate Yourself!")
 
 
 func _on_body_entered(_body):

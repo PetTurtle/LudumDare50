@@ -43,7 +43,7 @@ func _process(delta):
 	
 	var water_distance = water.global_position.distance_to(player.global_position)
 		
-	water_speed = min(70, water_speed + water_acceleration * delta)
+	water_speed = min(60, water_speed + water_acceleration * delta)
 	water.position.y -= water_speed * water_distance/400 * delta
 	camera.limit_bottom = water.position.y + 64
 	

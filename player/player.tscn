@@ -1,12 +1,18 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://player/body.gd" type="Script" id=1]
 [ext_resource path="res://player/head.png" type="Texture" id=2]
 [ext_resource path="res://player/player.gd" type="Script" id=3]
 [ext_resource path="res://player/self_intersect_detector.gd" type="Script" id=4]
 
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -0.605566, 0.0, 0, 0 ]
+
 [sub_resource type="CircleShape2D" id=1]
 radius = 9.0
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.963636 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
 [node name="Player" type="Area2D"]
 z_index = 5
@@ -14,6 +20,20 @@ collision_layer = 2
 collision_mask = 5
 priority = 1.0
 script = ExtResource( 3 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 100
+lifetime = 3.0
+local_coords = false
+emission_shape = 1
+emission_sphere_radius = 4.0
+gravity = Vector2( 0, 0 )
+angle = 157.5
+angle_random = 1.0
+scale_amount = 4.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 2 )
+color = Color( 0.94902, 0.682353, 0.6, 1 )
 
 [node name="HeadCollider" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -43,7 +63,25 @@ script = ExtResource( 4 )
 [node name="Head" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[node name="BoostParticles" type="CPUParticles2D" parent="."]
+position = Vector2( 9, 0 )
+emitting = false
+amount = 100
+local_coords = false
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector2( -1, 0 )
+spread = 82.98
+gravity = Vector2( 0, 0 )
+initial_velocity = 52.12
+initial_velocity_random = 0.24
+angle = 720.0
+angle_random = 1.0
+scale_amount = 4.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 3 )
+color = Color( 0.964706, 0.784314, 0.0784314, 0.964706 )
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
 [connection signal="extended_body" from="Body" to="Body/SelfIntersect" method="_on_extended_body"]

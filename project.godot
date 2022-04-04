@@ -49,11 +49,14 @@ config/icon="res://icon.png"
 
 Global="*res://autoload/Global.gd"
 SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
+Audio="*res://autoload/audio.gd"
+Effects="*res://autoload/particles.gd"
 
 [display]
 
 window/size/width=640
 window/size/height=360
+window/size/fullscreen=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
@@ -127,6 +130,11 @@ pause={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
+music={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":80,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -135,6 +143,7 @@ pause={
 2d_physics/layer_3="PlayerBody"
 2d_physics/layer_4="Water"
 2d_physics/layer_5="Wall"
+2d_physics/layer_6="Objects"
 
 [physics]
 

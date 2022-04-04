@@ -12,8 +12,7 @@ onready var _player := $AnimationPlayer as AnimationPlayer
 
 
 func _ready():
-	if auto_open:
-		open()
+	visible = true
 
 
 func open():
@@ -31,3 +30,8 @@ func _on_animation_player_animation_finished(_anim_name: String):
 		emit_signal("closed")
 	else:
 		emit_signal("opened")
+
+
+func _on_Timer_timeout():
+	if auto_open:
+		open()
